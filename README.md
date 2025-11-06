@@ -31,8 +31,6 @@ docker push $REGION-docker.pkg.dev/$PROJECT_ID/$ARTIFACT_REPO/backend:v1.5
 
 # 3) Create K8s Secret for DB connection (YAML)
 
-```
-
 Apply:
 
 ```bash
@@ -56,7 +54,7 @@ kubectl apply -f k8s/sa-backend.yaml
 Apply & wait:
 
 ```bash
-kubectl apply -f backend.yaml
+kubectl apply -f k8s/backend.yaml
 kubectl rollout status deployment/backend
 ```
 
@@ -64,12 +62,12 @@ kubectl rollout status deployment/backend
 
 # 6) Deploy frontend Service/Deployment (temporary image OK)
 
-Create `frontend.yaml` (we’ll update the image later):
+Create `frontend deployment` (we’ll update the image later):
 
 Apply:
 
 ```bash
-kubectl apply -f frontend.yaml
+kubectl apply -f k8s/frontend.yaml
 kubectl rollout status deployment/frontend
 ```
 
