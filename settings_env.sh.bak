@@ -49,14 +49,15 @@ gcloud projects add-iam-policy-binding orca-lab01 \
   --member="serviceAccount:gke-sql-access@orca-lab01.iam.gserviceaccount.com" \
   --role="roles/cloudsql.client"
 
-echo "Creting KSA for backend service account"
-kubectl create serviceaccount backend-sa
+
 
 echo "Binding workloadidentityuser role to backend K8s service account"
 gcloud iam service-accounts add-iam-policy-binding gke-sql-access@orca-lab01.iam.gserviceaccount.com \
   --member="serviceAccount:orca-lab01.svc.id.goog[default/backend-sa]" \
   --role="roles/iam.workloadIdentityUser"
 
+echo "Creting KSA for backend service account"
+kubectl create serviceaccount backend-sa
 
 kubectl annotate serviceaccount backend-sa \
   iam.gke.io/gcp-service-account=gke-sql-access@orca-lab01.iam.gserviceaccount.com
