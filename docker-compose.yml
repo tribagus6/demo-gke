@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: local_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tasks_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: tasks_db
+      DB_HOST: db
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:5000
+    ports:
+      - "3000:3000"
+    # Proxy API calls
+    extra_hosts:
+      - "api:host-gateway"
+
+volumes:
+  postgres-data:
